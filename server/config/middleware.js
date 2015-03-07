@@ -1,7 +1,7 @@
 var morgan      = require('morgan'), // used for logging incoming request
     bodyParser  = require('body-parser'),
     helpers     = require('./helpers.js'); // our custom middleware
-
+    path        = require('path');
 
 module.exports = function (app, express) {
   // Express 4 allows us to use multiple routers with their own configurations
@@ -14,6 +14,7 @@ module.exports = function (app, express) {
   app.use(express.static(__dirname + '/../../client'));
 
 
+
   app.use('/api/users', userRouter); // use user router for all user request
 
   // authentication middleware used to decode token and made available on the request
@@ -21,6 +22,14 @@ module.exports = function (app, express) {
   app.use('/api/links', linkRouter); // user link router for link request
   app.use(helpers.errorLogger);
   app.use(helpers.errorHandler);
+
+
+
+  app.use('/', function(req, res, next){
+    var truePath = path.resolve(__dirname + '/../../client/index.html')
+    res.sendFile(truePath);
+  })
+
 
   // inject our routers into their respective route files
   require('../users/userRoutes.js')(userRouter);
