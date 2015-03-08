@@ -1,4 +1,5 @@
 var jwt  = require('jwt-simple');
+var path = require('path')
 
 module.exports = {
   errorLogger: function (error, req, res, next) {
@@ -17,9 +18,13 @@ module.exports = {
   decode: function (req, res, next) {
     var token = req.headers['x-access-token'];
     var user;
-
+    console.log("TOKEN", token)
     if (!token) {
-      return res.send(403); // send forbidden if a token is not provided
+      var truePath = path.resolve(__dirname + '/../../client/index.html')
+      console.log(truePath)
+      res.sendFile(truePath);
+      // return
+      // return res.redirect('/signin'); // send forbidden if a token is not provided
     }
 
     try {
